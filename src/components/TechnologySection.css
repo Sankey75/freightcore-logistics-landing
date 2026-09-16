@@ -1,0 +1,237 @@
+.technology-section {
+  padding: 8rem 0;
+  position: relative;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+.technology-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(228, 61, 18, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.tech-header {
+  margin-bottom: 5rem;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.tech-header .section-subtitle {
+  margin-top: 1rem;
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+
+.tech-module {
+  position: relative;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
+  background-color: var(--surface);
+}
+
+.tech-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--border);
+  transition: all 0.4s ease;
+}
+
+.tech-module:hover .tech-accent-line {
+  background-color: var(--accent);
+  height: 4px;
+}
+
+.tech-number {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--muted);
+  opacity: 0.2;
+  font-weight: 700;
+  transition: all 0.4s ease;
+  line-height: 1;
+}
+
+.tech-module:hover .tech-number {
+  color: var(--accent);
+  opacity: 1;
+  transform: translateY(-10px);
+}
+
+.tech-content {
+  position: relative;
+  z-index: 2;
+}
+
+.tech-module-title {
+  font-size: 1.25rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  transition: transform 0.4s ease;
+}
+
+.tech-module-desc {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.7;
+  opacity: 1;
+  transition: color 0.4s ease;
+}
+
+.tech-module:hover .tech-module-title {
+  transform: translateY(-2px);
+  color: var(--accent);
+}
+
+.tech-module:hover .tech-module-desc {
+  color: var(--text);
+}
+
+.tech-bg-visual {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(245, 158, 11, 0.1) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tech-module:hover .tech-bg-visual {
+  opacity: 1;
+}
+
+.tech-module:hover {
+  transform: translateY(-8px);
+  background-color: var(--surface-hover);
+  border-color: rgba(228, 61, 18, 0.15);
+  box-shadow: 0 20px 40px rgba(228, 61, 18, 0.1);
+}
+
+/* SVG Animations */
+.tech-svg {
+  width: 80px;
+  height: 80px;
+  overflow: visible;
+}
+
+.tech-visual-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: rgba(228, 61, 18, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(228, 61, 18, 0.12);
+  transition: background 0.4s ease, border-color 0.4s ease;
+  flex-shrink: 0;
+}
+
+.tech-module:hover .tech-visual-container {
+  background: rgba(228, 61, 18, 0.12);
+  border-color: rgba(228, 61, 18, 0.3);
+}
+
+/* Ping Animation (Real-Time Visibility) */
+@keyframes techPing {
+  0% { opacity: 0.8; transform: scale(1); }
+  70% { opacity: 0; transform: scale(1.6); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+.tech-ping-circle {
+  transform-origin: 50px 50px;
+  animation: techPing 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Route path draw animation */
+@keyframes techRouteDrawIn {
+  from { stroke-dashoffset: 150; }
+  to { stroke-dashoffset: 0; }
+}
+
+.tech-route-primary {
+  animation: techRouteDrawIn 2.5s ease-in-out infinite;
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+}
+
+/* Bar grow animation */
+@keyframes techBarGrow {
+  from { transform: scaleY(0); transform-origin: bottom; }
+  to { transform: scaleY(1); transform-origin: bottom; }
+}
+
+.tech-bar {
+  transform-origin: bottom;
+  animation: techBarGrow 1.5s ease-out forwards;
+}
+
+.tech-bar:nth-child(2) { animation-delay: 0.15s; }
+.tech-bar:nth-child(3) { animation-delay: 0.3s; }
+
+/* Trend line */
+@keyframes techTrendDraw {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 0; }
+}
+
+.tech-trend {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: techTrendDraw 2s ease-out 0.5s forwards;
+}
+
+.tech-route-dot {
+  animation: techPing 2s ease infinite 1s;
+  transform-origin: 90px 10px;
+}
+
+/* Carbon ring slow rotation */
+@keyframes techCarbonSpin {
+  from { stroke-dashoffset: 55; }
+  to { stroke-dashoffset: -165; }
+}
+
+.tech-carbon-ring {
+  animation: techCarbonSpin 4s linear infinite;
+  transform-origin: 50px 50px;
+}
+
+@media (max-width: 768px) {
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+  .tech-number {
+    opacity: 0.5;
+  }
+  .tech-module {
+    min-height: auto;
+  }
+}

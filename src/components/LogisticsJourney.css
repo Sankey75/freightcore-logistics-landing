@@ -1,0 +1,243 @@
+/* ============================================================
+   LOGISTICS JOURNEY
+   ============================================================ */
+
+.logistics-journey {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.lj-container {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 4rem;
+  height: 80vh;
+}
+
+.lj-header {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lj-route-wrapper {
+  flex: 1.5;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 4rem;
+}
+
+/* The Route Lines */
+.lj-route-bg-line,
+.lj-route-active-line {
+  position: absolute;
+  top: 10%;
+  left: 4rem;
+  width: 2px;
+  height: 80%;
+  background-color: rgba(40, 85, 154, 0.1);
+  border-radius: 2px;
+}
+
+.lj-route-active-line {
+  background-color: var(--accent);
+  transform-origin: top center;
+  transform: scaleY(0);
+  box-shadow: 0 0 15px rgba(40, 85, 154, 0.5);
+  z-index: 2;
+}
+
+/* The Traveling Truck Marker */
+.lj-traveling-marker {
+  position: absolute;
+  top: 10%;
+  left: calc(4rem - 15px);
+  width: 32px;
+  height: 32px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transform: translateY(-50%);
+  transition: transform 0.1s linear;
+}
+
+.lj-marker-pulse {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Journey Steps */
+.lj-steps {
+  position: absolute;
+  top: 10%;
+  left: 4rem;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(100% - 4rem);
+}
+
+.lj-step-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 3rem;
+  opacity: 0.4;
+  transform: translateX(20px);
+  transition: all 0.5s ease;
+}
+
+.lj-step-item.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.lj-step-item.past {
+  opacity: 0.7;
+  transform: translateX(0);
+}
+
+/* Nodes on the line */
+.lj-step-node {
+  position: absolute;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--bg);
+  border: 2px solid rgba(40, 85, 154, 0.2);
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.lj-step-item.active .lj-step-node,
+.lj-step-item.past .lj-step-node {
+  border-color: var(--accent);
+}
+
+.lj-node-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  transition: transform 0.3s ease 0.1s;
+}
+
+.lj-step-item.active .lj-node-inner,
+.lj-step-item.past .lj-node-inner {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Step Content Card */
+.lj-step-content {
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.lj-step-item.active .lj-step-content {
+  border-color: rgba(40, 85, 154, 0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.lj-step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.lj-step-id {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.lj-step-icon {
+  color: var(--muted);
+}
+
+.lj-step-item.active .lj-step-icon {
+  color: var(--text);
+}
+
+.lj-step-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.lj-step-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 992px) {
+  .lj-container {
+    flex-direction: column;
+    padding: 0 2rem;
+  }
+  
+  .lj-header {
+    flex: 0;
+    margin-bottom: 2rem;
+  }
+  
+  .lj-route-wrapper {
+    flex: 1;
+    padding-left: 2rem;
+  }
+  
+  .lj-route-bg-line,
+  .lj-route-active-line {
+    left: 2rem;
+  }
+  
+  .lj-traveling-marker {
+    left: calc(2rem - 15px);
+  }
+  
+  .lj-steps {
+    left: 2rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .lj-step-content {
+    padding: 1rem;
+  }
+}

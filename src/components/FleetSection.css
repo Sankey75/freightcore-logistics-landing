@@ -1,0 +1,236 @@
+.fleet-section {
+  padding: 8rem 0;
+  position: relative;
+  background-color: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+
+
+.fleet-header {
+  max-width: 700px;
+  margin-bottom: 5rem;
+}
+
+
+/* Dashboard Visual */
+.dashboard-wrapper {
+  position: relative;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-card {
+  padding: 2rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(40, 85, 154, 0.2);
+}
+
+.main-stat {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 380px;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.card-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.main-stat .card-value {
+  font-size: clamp(3.5rem, 6vw, 5rem);
+}
+
+.accent-plus, .accent-percent {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.card-value.success {
+  color: #10b981;
+}
+
+.card-trend {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+.card-trend.positive {
+  color: #10b981;
+}
+.card-trend.neutral {
+  color: var(--steel);
+}
+
+/* Abstract Chart */
+.card-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 100px;
+  margin-top: 2rem;
+}
+
+.chart-bar {
+  flex: 1;
+  background-color: var(--surface-hover);
+  border-radius: 4px 4px 0 0;
+  transition: background-color 0.3s;
+}
+
+.chart-bar.active, .dashboard-card:hover .chart-bar.active {
+  background-color: var(--accent);
+}
+
+.dashboard-card:hover .chart-bar:not(.active) {
+  background-color: rgba(40, 85, 154, 0.1);
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  height: 4px;
+  background-color: var(--surface-hover);
+  border-radius: 2px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--accent);
+  border-radius: 2px;
+}
+
+.dashboard-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, rgba(9, 9, 11, 0) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .fleet-section {
+    padding: 5rem 0;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .main-stat {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 280px;
+  }
+}
+
+
+/* Fleet Cards Grid */
+
+
+.fleet-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.fleet-card {
+  padding: 2.5rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(40, 85, 154, 0.05);
+  transition: border-color 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.fleet-card:hover {
+  border-color: rgba(40, 85, 154, 0.2);
+}
+
+.fleet-card-visual-wrapper {
+  margin-bottom: 2rem;
+  transform: translateZ(30px);
+}
+
+.fleet-card-visual {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+  border: 1px solid rgba(40, 85, 154, 0.05);
+}
+
+.fleet-card-content {
+  transform: translateZ(20px);
+}
+
+.fleet-card-content h4 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.fleet-card-content p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.fleet-card-metric {
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .fleet-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

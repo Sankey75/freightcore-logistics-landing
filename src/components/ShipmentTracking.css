@@ -1,0 +1,258 @@
+/* ============================================================
+   SHIPMENT TRACKING
+   ============================================================ */
+
+.shipment-tracking {
+  position: relative;
+  padding: 8rem 0;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+/* Parallax Background Elements */
+.st-bg-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.st-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(40, 85, 154, 0.05) 0%, transparent 70%);
+}
+
+.st-bg-circle-1 {
+  width: 800px;
+  height: 800px;
+  top: -200px;
+  right: -200px;
+}
+
+.st-bg-circle-2 {
+  width: 600px;
+  height: 600px;
+  bottom: -100px;
+  left: -200px;
+}
+
+/* Card */
+.st-card {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem;
+  border-radius: 16px;
+  border: 1px solid rgba(40, 85, 154, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.st-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.st-subtitle {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* Form */
+.st-form {
+  margin-bottom: 3rem;
+}
+
+.st-input-group {
+  display: flex;
+  position: relative;
+  align-items: center;
+  background-color: var(--surface);
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.st-input-group:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(40, 85, 154, 0.1);
+}
+
+.st-input-icon {
+  color: var(--muted);
+  margin-left: 1rem;
+}
+
+.st-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 1rem 1rem 1rem 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+.st-input:focus {
+  outline: none;
+}
+
+.st-btn {
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Results Area */
+.st-results {
+  background-color: var(--surface);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid var(--border);
+}
+
+.st-results-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.st-result-id {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.st-result-eta {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Timeline */
+.st-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.st-progress-bg {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  width: 2px;
+  height: calc(100% - 20px);
+  background-color: var(--border);
+}
+
+.st-progress-fill {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  width: 2px;
+  height: 0; /* Animated */
+  background-color: var(--green);
+}
+
+.st-step {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.st-step:last-child {
+  padding-bottom: 0;
+}
+
+.st-step-indicator {
+  position: absolute;
+  left: -2rem;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--surface);
+  padding-top: 2px;
+}
+
+.st-icon-completed { color: var(--green); }
+.st-icon-active { color: var(--accent); }
+.st-icon-pending {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background-color: var(--surface);
+}
+
+.st-step-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.st-step-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.st-step.pending .st-step-label {
+  color: var(--muted);
+}
+
+.st-step-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.st-meta-loc {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .st-card {
+    padding: 2rem;
+  }
+  
+  .st-input-group {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .st-input-icon {
+    display: none;
+  }
+
+  .st-input {
+    width: 100%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .st-btn {
+    width: 100%;
+  }
+
+  .st-results-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

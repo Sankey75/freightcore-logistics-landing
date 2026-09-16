@@ -1,0 +1,190 @@
+/* ============================================================
+   SERVICE SHOWCASE
+   ============================================================ */
+
+.service-showcase {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+.ss-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left Side */
+.ss-content {
+  flex: 1;
+  padding: 6rem 4rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.ss-header {
+  margin-bottom: 3rem;
+}
+
+.ss-tabs-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+
+.ss-tab {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  border: 1px solid transparent;
+  transform: translateX(0);
+}
+
+.ss-tab:hover {
+  opacity: 0.8;
+  transform: translateX(5px);
+  background-color: rgba(40, 85, 154, 0.05);
+  border-color: rgba(40, 85, 154, 0.1);
+}
+
+.ss-tab.active {
+  opacity: 1;
+  transform: translateX(10px);
+  background-color: var(--surface);
+  border-color: rgba(40, 85, 154, 0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.ss-tab-number {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ss-tab.active .ss-tab-number {
+  color: var(--accent);
+}
+
+.ss-tab-icon {
+  color: var(--text);
+}
+
+.ss-tab-title {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.ss-text-container {
+  position: relative;
+  flex: 1;
+}
+
+.ss-text-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 480px;
+}
+
+.ss-active-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.ss-active-desc {
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.ss-active-stat {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 12px;
+  min-width: 200px;
+}
+
+.ss-stat-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.ss-stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* Right Side Visuals */
+.ss-visuals {
+  flex: 1.2;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ss-visual-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform, clip-path;
+}
+
+.ss-visual-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, var(--bg) 0%, transparent 30%);
+}
+
+@media (max-width: 992px) {
+  .ss-container {
+    flex-direction: column;
+  }
+  
+  .ss-content {
+    padding: 4rem 2rem;
+  }
+  
+  .ss-tabs-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .ss-tab {
+    min-width: 200px;
+  }
+  
+  .ss-visuals {
+    display: none; /* Hide complex visuals on mobile for performance, or simplify */
+  }
+}

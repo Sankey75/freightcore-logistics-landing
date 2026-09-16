@@ -1,0 +1,100 @@
+/* ============================================================
+   SCROLL PROGRESS NAV — Vertical sidebar indicator
+   ============================================================ */
+.scroll-progress-container {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  pointer-events: all;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.progress-item:hover {
+  opacity: 0.8;
+}
+
+.progress-item.active {
+  opacity: 1;
+}
+
+/* Number */
+.progress-num {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  width: 1.4rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.progress-item.active .progress-num {
+  color: var(--accent);
+}
+
+/* Line tick */
+.progress-line {
+  width: 20px;
+  height: 1px;
+  background-color: var(--steel);
+  transition: width 0.3s ease, background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.progress-item.active .progress-line {
+  width: 32px;
+  background-color: var(--accent);
+}
+
+/* Label — hidden by default, shown on hover */
+.progress-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.progress-item:hover .progress-label,
+.progress-item.active .progress-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Hide on small screens */
+@media (max-width: 1024px) {
+  .scroll-progress-container {
+    right: 1rem;
+  }
+  .progress-label {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-progress-container {
+    display: none;
+  }
+}

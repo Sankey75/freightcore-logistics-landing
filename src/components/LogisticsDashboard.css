@@ -1,0 +1,132 @@
+/* ============================================================
+   LOGISTICS DASHBOARD
+   ============================================================ */
+
+.logistics-dashboard {
+  position: relative;
+  padding: 8rem 0;
+  background-color: var(--bg);
+}
+
+.ld-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ld-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.ld-card {
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(40, 85, 154, 0.1);
+}
+
+.ld-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border-color: rgba(40, 85, 154, 0.2);
+}
+
+.ld-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ld-card-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: rgba(40, 85, 154, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ld-card-icon {
+  color: var(--accent);
+}
+
+.ld-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ld-card-value-wrapper {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items:baseline;
+}
+
+.ld-card-value {
+  font-size: 3rem;
+  letter-spacing: -0.02em;
+}
+
+.ld-card-prefix, .ld-card-suffix {
+  font-size: 1.5rem;
+  color: var(--muted);
+}
+
+.ld-card-suffix {
+  margin-left: 0.25rem;
+}
+
+/* Mini Bar Chart */
+.ld-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 60px;
+  margin-top: auto;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.ld-bar {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  background-color: var(--surface);
+  border-radius: 2px 2px 0 0;
+}
+
+.ld-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--accent);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.ld-card:hover .ld-bar-fill {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .ld-card {
+    padding: 1.5rem;
+  }
+  
+  .ld-card-value {
+    font-size: 2.5rem;
+  }
+}

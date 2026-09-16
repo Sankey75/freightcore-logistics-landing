@@ -1,0 +1,22 @@
+/* ============================================================
+   ANIMATIONS — Utility keyframes & entrance classes
+   ============================================================ */
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.9s ease forwards;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.9s var(--ease-out-expo) forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}

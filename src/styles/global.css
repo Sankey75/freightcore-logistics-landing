@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --bg:            #ffffff;
+  --surface:       #f9f9f9;
+  --surface-hover: #f0f0f0;
+  --text:          #333333;
+  --muted:         #6b7280;
+  --accent:        #28559a;
+  --accent-hover:  #1e4073;
+  --gold:          #f4d03f;
+  --border:        #bfbfbf;
+  --border-hover:  #a0a0a0;
+  --steel:         #bfbfbf;
+  --green:         #00a651;
+  --glass:         rgba(40, 85, 154, 0.15);
+
+  --font-sans:     'Inter', system-ui, sans-serif;
+  --font-display:  'Space Grotesk', system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: auto; }
+
+html, body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+a { color: inherit; text-decoration: none; }
+button { background: none; border: none; font-family: inherit; cursor: pointer; }
+ul { list-style: none; }
+img, video { max-width: 100%; display: block; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+@media (max-width: 1024px) { .container { padding: 0 2rem; } }
+@media (max-width: 768px)  { .container { padding: 0 1.25rem; } }
+
+/* ============================================================
+   GLASS PANEL
+   ============================================================ */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.85rem;
+  background-color: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  min-height: 48px;
+  transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(40, 85, 154, 0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.85rem;
+  background-color: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  min-height: 48px;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-hover);
+  background-color: rgba(40, 85, 154, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   SHARED SECTION TYPOGRAPHY
+   ============================================================ */
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 540px;
+}
+
+/* ============================================================
+   INTERACTIVE CARDS
+   ============================================================ */
+.interactive-card {
+  transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s ease;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* ============================================================
+   LINK UNDERLINE
+   ============================================================ */
+.link-underline { position: relative; }
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* ============================================================
+   HERO GRID OVERLAY
+   ============================================================ */
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(40,85,154,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40,85,154,0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--steel); }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.mt-24 { margin-top: 6rem; }
+.mt-16 { margin-top: 4rem; }
+.mt-8  { margin-top: 2rem; }
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
