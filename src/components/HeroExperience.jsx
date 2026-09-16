@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TruckScene } from './TruckScene';
@@ -11,8 +11,8 @@ const HeroExperience = () => {
   const webglRef = useRef(null);
   const truckSceneRef = useRef(null);
   
-  const [speed, setSpeed] = useState(0);
-  const [phase, setPhase] = useState('01 PICKUP');
+  const speedRef = useRef(null);
+  const phaseRef = useRef(null);
 
   useEffect(() => {
     if (webglRef.current && !truckSceneRef.current) {
@@ -62,14 +62,15 @@ const HeroExperience = () => {
           if (p > 0.05 && p < 0.95) currentSpeed = 72 + Math.random() * 5;
           else if (p <= 0.05) currentSpeed = (p / 0.05) * 72;
           else currentSpeed = ((1 - p) / 0.05) * 72;
-          setSpeed(Math.max(0, currentSpeed).toFixed(0));
+          let newPhase = '01 PICKUP';
+          if (p < 0.2) newPhase = '01 PICKUP';
+          else if (p < 0.4) newPhase = '02 IN TRANSIT';
+          else if (p < 0.6) newPhase = '03 DISTRIBUTION';
+          else if (p < 0.8) newPhase = '04 GLOBAL NETWORK';
+          else newPhase = '05 DELIVERY';
 
-          // Phase text logic
-          if (p < 0.2) setPhase('01 PICKUP');
-          else if (p < 0.4) setPhase('02 IN TRANSIT');
-          else if (p < 0.6) setPhase('03 DISTRIBUTION');
-          else if (p < 0.8) setPhase('04 GLOBAL NETWORK');
-          else setPhase('05 DELIVERY');
+          if (speedRef.current) speedRef.current.innerHTML = Math.max(0, currentSpeed).toFixed(0) + ' <span class="ste-unit">km/h</span>';
+          if (phaseRef.current) phaseRef.current.innerText = newPhase;
 
           // Fade out left hero content as we scroll
           gsap.to('.hero-left-content', {
@@ -135,11 +136,11 @@ const HeroExperience = () => {
       <div className="hero-hud-overlay">
         <div className="ste-hud-box glass-panel">
           <div className="ste-hud-label">PHASE</div>
-          <div className="ste-hud-value accent">{phase}</div>
+          <div className="ste-hud-value accent" ref={phaseRef}>01 PICKUP</div>
         </div>
         <div className="ste-hud-box glass-panel">
           <div className="ste-hud-label">SPEED</div>
-          <div className="ste-hud-value">{speed} <span className="ste-unit">km/h</span></div>
+          <div className="ste-hud-value" ref={speedRef}>0 <span className="ste-unit">km/h</span></div>
         </div>
       </div>
 

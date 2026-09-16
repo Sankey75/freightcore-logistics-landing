@@ -20,7 +20,7 @@ export class TruckScene {
     this.camera.lookAt(0, 2, 0);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.0 : 1.5));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -45,8 +45,8 @@ export class TruckScene {
     this.sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
     this.sunLight.position.set(10, 20, 10);
     this.sunLight.castShadow = true;
-    this.sunLight.shadow.mapSize.width = 2048;
-    this.sunLight.shadow.mapSize.height = 2048;
+    this.sunLight.shadow.mapSize.width = 512;
+    this.sunLight.shadow.mapSize.height = 512;
     this.sunLight.shadow.camera.near = 0.5;
     this.sunLight.shadow.camera.far = 50;
     this.sunLight.shadow.camera.left = -15;
