@@ -163,7 +163,7 @@ export class TruckScene {
     this.envGroup = new THREE.Group();
 
     // Ground
-    const groundGeo = new THREE.PlaneGeometry(200, 200);
+    const groundGeo = new THREE.PlaneGeometry(1000, 200);
     const groundMat = new THREE.MeshStandardMaterial({ color: 0xe0e0e0, roughness: 1, metalness: 0 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
@@ -171,35 +171,35 @@ export class TruckScene {
     this.envGroup.add(ground);
 
     // Road
-    const roadGeo = new THREE.PlaneGeometry(200, 8);
+    const roadGeo = new THREE.PlaneGeometry(1000, 8);
     const roadMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.9 });
     const road = new THREE.Mesh(roadGeo, roadMat);
     road.rotation.x = -Math.PI / 2;
     road.position.y = 0.01;
     this.envGroup.add(road);
 
-    // Road markings
+    // Road markings (static)
     this.markings = [];
     const markGeo = new THREE.PlaneGeometry(2, 0.2);
     const markMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    for (let i = 0; i < 20; i++) {
+    for (let i = -50; i < 50; i++) {
       const mark = new THREE.Mesh(markGeo, markMat);
       mark.rotation.x = -Math.PI / 2;
-      mark.position.set(i * 10 - 100, 0.02, 0);
+      mark.position.set(i * 10, 0.02, 0);
       this.envGroup.add(mark);
       this.markings.push(mark);
     }
 
-    // Scenery boxes
+    // Scenery boxes (static)
     this.scenery = [];
     const boxGeo = new THREE.BoxGeometry(4, 6, 4);
     const boxMat1 = new THREE.MeshStandardMaterial({ color: 0xbfbfbf });
     const boxMat2 = new THREE.MeshStandardMaterial({ color: 0x00a651 });
     
-    for (let i = 0; i < 30; i++) {
+    for (let i = -30; i < 30; i++) {
       const mesh = new THREE.Mesh(boxGeo, Math.random() > 0.5 ? boxMat1 : boxMat2);
       const z = Math.random() > 0.5 ? 8 + Math.random() * 10 : -8 - Math.random() * 10;
-      mesh.position.set(i * 15 - 150, 3, z);
+      mesh.position.set(i * 15, 3, z);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       this.envGroup.add(mesh);
@@ -227,66 +227,86 @@ export class TruckScene {
     if (!this.prefersReducedMotion) {
       const p = this.progress;
       
-      // Map scroll progress to a virtual physical distance, plus a tiny idle crawl
-      const targetDistance = p * 2000;
-      this.virtualDistance = targetDistance + (this.clock.getElapsedTime() * 2);
+      // Calculate truck position (from x = -200 to x = 200)
+      const startX = -200;
+      const endX = 200;
+      const totalDistance = endX - startX;
       
-      const vd = this.virtualDistance;
-
-      // Parallax Environment
-      this.markings.forEach((m, i) => {
-        m.position.x = ((i * 10 - vd) % 200);
-        if (m.position.x > 100) m.position.x -= 200;
-        if (m.position.x < -100) m.position.x += 200;
-      });
-
-      this.scenery.forEach((s, i) => {
-        // Scenery moves at 40% speed of the road to create depth parallax
-        const initialX = i * 15 - 150;
-        s.position.x = initialX - (vd * 0.4);
-        // wrap around
-        while(s.position.x < -200) s.position.x += 450;
-        while(s.position.x > 250) s.position.x -= 450;
-      });
-
-      // Physically accurate wheel rotation
+      // Physical coordinate of the truck based strictly on scroll
+      const truckX = startX + (p * totalDistance);
+      
+      // We calculate a virtual delta to keep wheels turning correctly
+      // (derivative of position + a tiny idle crawl)
+      const prevX = this.truckGroup.position.x || startX;
+      const deltaX = truckX - prevX;
+      const idleCrawl = this.clock.getDelta() * 0.5; // moves 0.5 units per sec when not scrolling
+      
+      // Set physical position
+      this.truckGroup.position.x = truckX + (this.clock.getElapsedTime() * 0.5); // Add idle time to position
+      const actualX = this.truckGroup.position.x;
+      
+      // Wheels rotate based on physical distance traveled
       this.wheels.forEach(w => {
-        w.rotation.z = -vd * 0.5;
+        w.rotation.z -= (deltaX + idleCrawl) * 1.5;
       });
 
-      // Cinematic suspension and subtle body roll
-      // Bounce based on distance traveled (rough road) + idle engine vibration
-      this.truckGroup.position.y = Math.sin(vd * 0.5) * 0.05 + Math.sin(Date.now() * 0.02) * 0.01;
-      this.truckGroup.rotation.z = Math.sin(vd * 0.2) * 0.005;
-      this.truckGroup.rotation.x = Math.sin(vd * 0.15) * 0.01;
+      // Subtle suspension bounce based on physical distance traveled
+      this.truckGroup.position.y = Math.sin(actualX * 0.5) * 0.05 + Math.sin(Date.now() * 0.02) * 0.01;
+      this.truckGroup.rotation.z = Math.sin(actualX * 0.2) * 0.005;
+      this.truckGroup.rotation.x = Math.sin(actualX * 0.15) * 0.01;
 
-      // Cinematic Camera tracking
+      // Ensure shadow follows the truck
+      this.sunLight.position.x = actualX + 10;
+      this.sunLight.target.position.x = actualX;
+      this.sunLight.target.updateMatrixWorld();
+
+      // Cinematic Camera Tracking
       const cam = this.camera;
+      
+      // The camera has an offset from the truck's current position
+      // By changing the offset over the journey, we get a cinematic track
+      let offsetX, offsetY, offsetZ;
       
       if (p < 0.1) {
         // Wide establishing shot
-        cam.position.lerpVectors(new THREE.Vector3(15, 6, 15), new THREE.Vector3(-10, 5, 20), p / 0.1);
+        const t = p / 0.1;
+        offsetX = THREE.MathUtils.lerp(15, -10, t);
+        offsetY = THREE.MathUtils.lerp(6, 5, t);
+        offsetZ = THREE.MathUtils.lerp(15, 20, t);
       } else if (p < 0.4) {
-        // Dramatic side-tracking acceleration shot
+        // Pushing in on the side (acceleration)
         const t = (p - 0.1) / 0.3;
-        cam.position.lerpVectors(new THREE.Vector3(-10, 5, 20), new THREE.Vector3(-18, 6, 12), t);
+        offsetX = THREE.MathUtils.lerp(-10, -18, t);
+        offsetY = THREE.MathUtils.lerp(5, 6, t);
+        offsetZ = THREE.MathUtils.lerp(20, 12, t);
       } else if (p < 0.7) {
         // High cruising perspective
         const t = (p - 0.4) / 0.3;
-        cam.position.lerpVectors(new THREE.Vector3(-18, 6, 12), new THREE.Vector3(-8, 12, 25), t);
+        offsetX = THREE.MathUtils.lerp(-18, -8, t);
+        offsetY = THREE.MathUtils.lerp(6, 12, t);
+        offsetZ = THREE.MathUtils.lerp(12, 25, t);
       } else if (p < 0.9) {
-        // Logistics hub entry, panning around
+        // Swoop around to the front/side for hub entry
         const t = (p - 0.7) / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(-8, 12, 25), new THREE.Vector3(10, 15, 20), t);
+        offsetX = THREE.MathUtils.lerp(-8, 10, t);
+        offsetY = THREE.MathUtils.lerp(12, 15, t);
+        offsetZ = THREE.MathUtils.lerp(25, 20, t);
       } else {
         // Final delivery wide shot
         const t = (p - 0.9) / 0.1;
-        cam.position.lerpVectors(new THREE.Vector3(10, 15, 20), new THREE.Vector3(18, 8, 15), t);
+        offsetX = THREE.MathUtils.lerp(10, 18, t);
+        offsetY = THREE.MathUtils.lerp(15, 8, t);
+        offsetZ = THREE.MathUtils.lerp(20, 15, t);
       }
       
-      // Slight camera shake based on speed
-      const shake = (p > 0.1 && p < 0.9) ? Math.sin(Date.now() * 0.05) * 0.02 : 0;
-      cam.lookAt(this.truckGroup.position.x, this.truckGroup.position.y + 2 + shake, this.truckGroup.position.z);
+      // The camera moves with the truck, plus the cinematic offset
+      cam.position.set(actualX + offsetX, offsetY, offsetZ);
+      
+      // Slight camera shake based on speed (deltaX)
+      const shake = (Math.abs(deltaX) > 0.1) ? Math.sin(Date.now() * 0.05) * 0.02 : 0;
+      
+      // Look at the truck
+      cam.lookAt(actualX, this.truckGroup.position.y + 2 + shake, this.truckGroup.position.z);
     }
 
     this.renderer.render(this.scene, this.camera);
