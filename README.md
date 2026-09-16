@@ -2,6 +2,7 @@
   <h1>🚛 FreightCore Logistics</h1>
   <p><strong>Premium Scroll-Driven Logistics Experience</strong></p>
   <p><em>Built for the Truckinzy Infotech Pvt Ltd — Full-Stack Developer Intern Assignment</em></p>
+  <p>🌍 <strong><a href="https://freightcore-logistics-gold.vercel.app/" target="_blank">Live Demo on Vercel</a></strong></p>
 </div>
 
 ---
