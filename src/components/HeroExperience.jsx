@@ -57,11 +57,14 @@ const HeroExperience = () => {
             truckSceneRef.current.seek(p);
           }
 
-          // HUD Speed logic
-          let currentSpeed = 0;
-          if (p > 0.05 && p < 0.95) currentSpeed = 72 + Math.random() * 5;
-          else if (p <= 0.05) currentSpeed = (p / 0.05) * 72;
-          else currentSpeed = ((1 - p) / 0.05) * 72;
+          // Calculate derivative of progress for realistic speed
+          const dp = Math.abs(p - (self.previousProgress || 0));
+          self.previousProgress = p;
+          
+          let currentSpeed = dp * 15000; // Multiplier to make it look like km/h
+          if (currentSpeed < 2 && p > 0 && p < 1) currentSpeed = 2 + Math.random(); // idle speed
+          if (currentSpeed > 85) currentSpeed = 82 + Math.random() * 3; // cap max speed
+          if (p <= 0 || p >= 1) currentSpeed = 0;
           let newPhase = '01 PICKUP';
           if (p < 0.2) newPhase = '01 PICKUP';
           else if (p < 0.4) newPhase = '02 IN TRANSIT';
@@ -72,17 +75,32 @@ const HeroExperience = () => {
           if (speedRef.current) speedRef.current.innerHTML = Math.max(0, currentSpeed).toFixed(0) + ' <span class="ste-unit">km/h</span>';
           if (phaseRef.current) phaseRef.current.innerText = newPhase;
 
-          // Fade out left hero content as we scroll
-          gsap.to('.hero-left-content', {
-            opacity: p > 0.1 ? 0 : 1 - (p * 10),
-            y: p > 0.1 ? -50 : -p * 500,
-            duration: 0.5,
-            overwrite: 'auto'
-          });
+          // Text synchronization logic
+          let newDesc = 'WE MOVE FREIGHT.';
+          if (p < 0.2) newDesc = 'WE MOVE FREIGHT.';
+          else if (p < 0.4) newDesc = 'WE CONNECT MARKETS.';
+          else if (p < 0.6) newDesc = 'WE OPTIMIZE EVERY MILE.';
+          else if (p < 0.8) newDesc = 'WE CONNECT THE WORLD.';
+          else newDesc = 'MOVING THE WORLD. DELIVERING POSSIBILITIES.';
 
-          // Show HUD only after we start moving
+          if (self.currentDesc !== newDesc) {
+            self.currentDesc = newDesc;
+            gsap.to('.hero-desc-main', {
+              opacity: 0,
+              y: -10,
+              duration: 0.3,
+              overwrite: 'auto',
+              onComplete: () => {
+                const el = document.querySelector('.hero-desc-main');
+                if (el) el.innerText = newDesc;
+                gsap.to('.hero-desc-main', { opacity: 1, y: 0, duration: 0.3, overwrite: 'auto' });
+              }
+            });
+          }
+
+          // Keep HUD visible whenever not strictly at ends
           gsap.to('.hero-hud-overlay', {
-            opacity: p > 0.1 && p < 0.9 ? 1 : 0,
+            opacity: p > 0.05 && p < 0.95 ? 1 : 0,
             duration: 0.5,
             overwrite: 'auto'
           });

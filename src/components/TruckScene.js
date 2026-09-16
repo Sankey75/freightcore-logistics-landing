@@ -225,58 +225,68 @@ export class TruckScene {
     const delta = Math.min(this.clock.getDelta(), 0.05);
 
     if (!this.prefersReducedMotion) {
-      let speedMultiplier = 0;
-      if (this.progress > 0.05 && this.progress < 0.95) {
-        speedMultiplier = 1; 
-      } else if (this.progress <= 0.05) {
-        speedMultiplier = this.progress / 0.05;
-      } else {
-        speedMultiplier = (1.0 - this.progress) / 0.05;
-      }
+      const p = this.progress;
+      
+      // Map scroll progress to a virtual physical distance, plus a tiny idle crawl
+      const targetDistance = p * 2000;
+      this.virtualDistance = targetDistance + (this.clock.getElapsedTime() * 2);
+      
+      const vd = this.virtualDistance;
 
-      const speed = 40 * speedMultiplier * delta;
-
-      this.markings.forEach(m => {
-        m.position.x -= speed;
+      // Parallax Environment
+      this.markings.forEach((m, i) => {
+        m.position.x = ((i * 10 - vd) % 200);
+        if (m.position.x > 100) m.position.x -= 200;
         if (m.position.x < -100) m.position.x += 200;
       });
 
-      this.scenery.forEach(s => {
-        s.position.x -= speed;
-        if (s.position.x < -100) s.position.x += 300;
+      this.scenery.forEach((s, i) => {
+        // Scenery moves at 40% speed of the road to create depth parallax
+        const initialX = i * 15 - 150;
+        s.position.x = initialX - (vd * 0.4);
+        // wrap around
+        while(s.position.x < -200) s.position.x += 450;
+        while(s.position.x > 250) s.position.x -= 450;
       });
 
+      // Physically accurate wheel rotation
       this.wheels.forEach(w => {
-        w.rotation.z -= speed * 1.5;
+        w.rotation.z = -vd * 0.5;
       });
 
-      if (speedMultiplier > 0.1) {
-        this.truckGroup.position.y = Math.sin(Date.now() * 0.02) * 0.02 * speedMultiplier;
-      } else {
-        this.truckGroup.position.y = 0;
-      }
+      // Cinematic suspension and subtle body roll
+      // Bounce based on distance traveled (rough road) + idle engine vibration
+      this.truckGroup.position.y = Math.sin(vd * 0.5) * 0.05 + Math.sin(Date.now() * 0.02) * 0.01;
+      this.truckGroup.rotation.z = Math.sin(vd * 0.2) * 0.005;
+      this.truckGroup.rotation.x = Math.sin(vd * 0.15) * 0.01;
 
-      const p = this.progress;
+      // Cinematic Camera tracking
       const cam = this.camera;
       
-      if (p < 0.2) {
-        const t = p / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(15, 6, 15), new THREE.Vector3(0, 5, 20), t);
+      if (p < 0.1) {
+        // Wide establishing shot
+        cam.position.lerpVectors(new THREE.Vector3(15, 6, 15), new THREE.Vector3(-10, 5, 20), p / 0.1);
       } else if (p < 0.4) {
-        const t = (p - 0.2) / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(0, 5, 20), new THREE.Vector3(-18, 8, 18), t);
-      } else if (p < 0.6) {
-        const t = (p - 0.4) / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(-18, 8, 18), new THREE.Vector3(-5, 15, 30), t);
-      } else if (p < 0.8) {
-        const t = (p - 0.6) / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(-5, 15, 30), new THREE.Vector3(0, 30, 5), t);
+        // Dramatic side-tracking acceleration shot
+        const t = (p - 0.1) / 0.3;
+        cam.position.lerpVectors(new THREE.Vector3(-10, 5, 20), new THREE.Vector3(-18, 6, 12), t);
+      } else if (p < 0.7) {
+        // High cruising perspective
+        const t = (p - 0.4) / 0.3;
+        cam.position.lerpVectors(new THREE.Vector3(-18, 6, 12), new THREE.Vector3(-8, 12, 25), t);
+      } else if (p < 0.9) {
+        // Logistics hub entry, panning around
+        const t = (p - 0.7) / 0.2;
+        cam.position.lerpVectors(new THREE.Vector3(-8, 12, 25), new THREE.Vector3(10, 15, 20), t);
       } else {
-        const t = (p - 0.8) / 0.2;
-        cam.position.lerpVectors(new THREE.Vector3(0, 30, 5), new THREE.Vector3(12, 6, 18), t);
+        // Final delivery wide shot
+        const t = (p - 0.9) / 0.1;
+        cam.position.lerpVectors(new THREE.Vector3(10, 15, 20), new THREE.Vector3(18, 8, 15), t);
       }
       
-      cam.lookAt(this.truckGroup.position);
+      // Slight camera shake based on speed
+      const shake = (p > 0.1 && p < 0.9) ? Math.sin(Date.now() * 0.05) * 0.02 : 0;
+      cam.lookAt(this.truckGroup.position.x, this.truckGroup.position.y + 2 + shake, this.truckGroup.position.z);
     }
 
     this.renderer.render(this.scene, this.camera);
