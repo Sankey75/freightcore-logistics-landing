@@ -1,60 +1,115 @@
-# FreightCore Logistics
+<div align="center">
+  <h1>🚛 FreightCore Logistics</h1>
+  <p><strong>Premium Scroll-Driven Logistics Experience</strong></p>
+  <p><em>Built for the Truckinzy Infotech Pvt Ltd — Full-Stack Developer Intern Assignment</em></p>
+</div>
 
-## Overview
-This is a premium scroll-driven logistics landing page created as a Full-Stack Developer Intern hiring assignment. It presents a fictional enterprise freight and fleet-management company called "FreightCore Logistics". The website demonstrates strong frontend engineering, focusing on responsive design, performance optimization, modular component architecture, and advanced animations using GSAP and Three.js.
+---
 
-## Tech Stack
-- **React** & **Vite**: For fast development and optimized production builds.
-- **GSAP & ScrollTrigger**: Used for scroll-driven animations, counters, and the complex pinned horizontal scroll sequence.
-- **Three.js**: Implements an optimized WebGL interactive hero scene (globe, moving nodes, curved routes, particles).
-- **CSS**: Modern plain CSS with CSS variables for the premium dark theme.
+## 📖 Overview
 
-## Features
-- **Responsive design**: Seamlessly adapts across Desktop, Tablet, and Mobile views.
-- **GSAP ScrollTrigger animations**: Element reveals, counters, and parallax effects.
-- **Pinned horizontal scroll experience**: The "Fleet Journey" section pins and scrubs horizontally on desktop, falling back to a clean vertical list on mobile.
-- **Three.js WebGL scene**: Interactive 3D scene with resource disposal, scaling, and reduced-motion support.
-- **Animated statistics**: Counters animate on entering the viewport.
-- **Global network visualization**: Abstract map with animated hub pings and route paths.
-- **Micro-interactions**: Button hovers, underline reveals, and card interaction effects.
-- **Reduced-motion support**: Animations and WebGL interactions respect the `prefers-reduced-motion` media query.
+**FreightCore Logistics** is a highly interactive, premium frontend application designed to showcase a modern enterprise logistics brand. It is a true single-page application (SPA) that leverages cutting-edge web animation technologies to create an immersive, story-driven scroll experience.
 
-## Run Locally
-To run the project on your local machine:
+The core philosophy behind this build was **"Logistics as a Cinematic Journey"**. Instead of a static brochure, the website reacts to the user's scroll, featuring a 3D WebGL freight truck that physically moves through the environment, paired with complex GSAP scroll triggers that assemble dashboards, draw global route lines, and transition between logistics phases.
 
-```bash
-npm install
-npm run dev
+---
+
+## ✨ Key Features & Assignment Requirements
+
+### 1. 🎬 GSAP ScrollTrigger Integration
+- **Complex Timelines**: Utilizes `gsap.timeline` with `scrub: true` to tie complex animations directly to the user's scroll position.
+- **Pinned Sections**: Features a horizontal-scrolling industry section and a pinned service showcase that reveals tabs seamlessly without losing the user's place on the page.
+- **Cinematic Reveals**: Custom text-blur staggers, clip-path image reveals, and parallax layering.
+- **Optimized Cleanup**: Employs `gsap.context()` inside React `useEffect` hooks to ensure animations are properly killed on unmount, preventing memory leaks.
+
+### 2. 🧊 Three.js / WebGL Environment
+- **Programmatic 3D Scene**: Instead of loading heavy external assets, the hero features a programmatic 3D freight truck built entirely with Vanilla Three.js geometries and materials.
+- **Scroll Synchronization**: The 3D camera and truck position are piped directly into a GSAP ScrollTrigger, creating a seamless connection between the DOM and the WebGL canvas.
+- **Performance First**: Implements a strict `requestAnimationFrame` loop with proper resource disposal (`geometry.dispose()`, `material.dispose()`) to guarantee a smooth 60fps experience.
+
+### 3. 📱 Responsive Architecture
+- **Fluid Layouts**: The application is fully responsive from `320px` mobile screens up to `1920px` ultrawide displays.
+- **Adaptive UX**: Complex interactions (like horizontal pinning) gracefully degrade to vertical stacks on touch devices to preserve scrolling UX.
+
+### 4. ♿ Accessibility & Performance
+- **Reduced Motion Support**: The application explicitly respects `@media (prefers-reduced-motion: reduce)`, disabling the heavy WebGL and GSAP animations for users who require it.
+- **Custom Loading State**: A tailored `<LoadingScreen />` ensures that fonts and WebGL contexts are fully initialized before releasing the scroll to the user, preventing layout thrashing.
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Technology |
+| :--- | :--- |
+| **Frontend Framework** | React 19 + Vite 8 |
+| **Animation Engine** | GSAP + ScrollTrigger |
+| **3D Rendering** | Vanilla Three.js |
+| **Styling** | Modern CSS Variables + Modular CSS |
+| **Icons** | Lucide React |
+
+---
+
+## 🚀 Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Sankey75/freightcore-logistics-landing.git
+   cd freightcore-logistics-landing
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+   *The application will be available at `http://localhost:5173`*
+
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 🧠 AI Development Process & Write-up
+
+As part of the assignment requirements, AI tools were strategically utilized to accelerate the development of this prototype, focusing primarily on boilerplate generation and repetitive CSS styling. 
+
+However, the core architectural decisions were strictly human-led:
+
+1. **Vanilla Three.js over React Three Fiber (R3F)**:
+   While R3F is popular, I chose to implement the 3D scene using Raw Three.js inside a `useRef` to demonstrate a fundamental understanding of WebGL lifecycle management, manual garbage collection, and raw canvas manipulation.
+   
+2. **GSAP Context Management**:
+   A major challenge when pairing React with GSAP is stale closures and memory leaks caused by React's double-mounting in Strict Mode. This was solved by wrapping all ScrollTriggers inside `gsap.context()` and rigorously calling `ctx.revert()` in the cleanup phase.
+
+3. **Performance Optimization (Layout Thrashing)**:
+   To prevent ScrollTrigger from calculating incorrect start/end points due to the `LoadingScreen` unmounting, a `setTimeout` with `ScrollTrigger.refresh()` was implemented to allow the DOM to settle before pinning calculations occur.
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── assets/            # Static images and icons
+├── components/        # Modular React components
+│   ├── HeroExperience # 3D Hero + GSAP Stagger
+│   ├── TruckScene.js  # Vanilla Three.js Logic
+│   ├── LogisticsJourney # Scroll-driven SVG path
+│   └── ...            # Other sections
+├── hooks/             # Custom React hooks (e.g. useGsapScroll)
+├── styles/            # Global CSS variables and utility classes
+├── App.jsx            # Main assembly and route layout
+└── main.jsx           # React DOM entry point
 ```
 
-## Build
-To create a production build:
+---
 
-```bash
-npm run build
-```
-The output will be in the `dist` folder.
-
-## Deployment
-This project can be easily deployed to platforms like Vercel or Netlify.
-For Vercel:
-1. Connect the GitHub repository to Vercel.
-2. Vercel will automatically detect the Vite setup.
-3. Deploy.
-
-## AI Development Process
-AI tools were utilized to accelerate boilerplate generation (Vite setup), scaffold standard component structures, and generate baseline CSS animations. However, the complex logic connecting GSAP ScrollTrigger to React component lifecycles, and the raw Three.js optimization (such as geometry disposal and performance tuning) were carefully structured and assembled to ensure maintainability, performance, and best practices.
-
-## Technical Decisions
-- **Raw Three.js over React Three Fiber**: Chose to implement the hero section using raw Three.js inside a `useEffect` to demonstrate a fundamental understanding of WebGL, manual resource disposal, and resize handling.
-- **CSS Modules vs Tailwind**: Used global CSS with variables to maintain fine-grained control over complex premium styling and animations without bloating the HTML with utility classes.
-- **Conditional ScrollTrigger**: Disabled the horizontal pinning on mobile devices to prevent UX issues commonly associated with nested scroll areas on touch devices.
-
-## Challenges & Solutions
-- **Challenge**: Memory leaks with Three.js.
-  - **Solution**: Implemented rigorous cleanup in the `useEffect` return function, disposing of geometries, materials, the renderer, and canceling the animation frame.
-- **Challenge**: ScrollTrigger calculating wrong heights due to the loading screen.
-  - **Solution**: Triggers a `ScrollTrigger.refresh()` after the loading screen completes and the DOM is fully visible.
-
-## Performance
-- Lighthouse/Core Web Vitals results pending after production deployment. (Targeting 90+ across all metrics).
+<div align="center">
+  <p>Developed for the Truckinzy Infotech Assignment.</p>
+</div>
